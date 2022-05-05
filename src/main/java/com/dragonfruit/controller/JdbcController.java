@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dragonfruit.exception.NotFoundException;
 import com.dragonfruit.model.PersonBean;
 import com.dragonfruit.service.PersonService;
 
@@ -33,4 +36,10 @@ public class JdbcController {
 	public PersonBean getPersonByParameter(@RequestParam String email) {
 		return personService.getPersonByEmail(email);
 	}		
+	
+	@PostMapping("/person")
+	public void savePerson(@RequestBody PersonBean personBean) {
+		personService.save(personBean);
+	}	
+	
 }

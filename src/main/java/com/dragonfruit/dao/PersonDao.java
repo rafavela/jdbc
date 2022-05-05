@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.dragonfruit.exception.NotFoundException;
 import com.dragonfruit.model.PersonBean;
 import com.dragonfruit.util.ApplicationConstants;
 
@@ -23,9 +24,10 @@ public class PersonDao {
 	@Value("${person.record}")
 	private String personRecord;
 	
+	@Value("${person.insert}")
+	private String personInsert;
+			
 	public List<PersonBean> getPersonList() {
-		System.out.println("personQuery "+personQuery);
-		
 		return template.query(personQuery, rowMapper);
 	}	
 	
@@ -45,7 +47,16 @@ public class PersonDao {
 				rowMapper)
 		 	.stream()
 		 	.findFirst()
-		 	.orElse(new PersonBean());			
+		 	.orElseThrow(()->new NotFoundException(email));
 	}
 	
+	
+	public void savePerson(PersonBean personBean) {		
+		template.update(personInsert, 
+			preparedStatement -> {
+				preparedStatement.setString(1, personBean.getFirstName());
+				preparedStatement.setString(2, personBean.getLastName());
+				preparedStatement.setString(3, personBean.getEmail());
+			});
+	}
 }
