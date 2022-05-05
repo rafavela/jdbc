@@ -17,5 +17,8 @@ public class PersonService {
 	public List<PersonBean> getPersonList() {
 		return personDao.getPersonList();
 	}
-	
+
+	public PersonBean getPersonByEmail(String email) {
+		return personDao.getPersonByEmail(email);
+	}	
 }
